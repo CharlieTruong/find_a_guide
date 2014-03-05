@@ -37,6 +37,7 @@ class User < ActiveRecord::Base
 
   def empty_reviews(type)
     if type == :visitor
+      # drop .reverse call and have SQL do ordering for you (DESC or ASC)
       self.visitor_meetups.where('date_time < ?', Time.now).order('date_time').reverse - self.visitor_reviews.map{|r| r.meetup}
     else
       self.ambassador_meetups.where('date_time < ?', Time.now).order('date_time').reverse - self.ambassador_reviews.map{|r| r.meetup}
@@ -57,13 +58,24 @@ class User < ActiveRecord::Base
     end
   end
 
+  def rating
+    0
+  end
+
   def all_ratings(type) #specify ambassador ratings
     reviews_received.where('reviewee_id = ?', id).order('created_at')
   end
 
+  # /users/:user_id/meetups/:id
+  # show meetup by :id (but scope search for meetup to user with :user_id
+  # User.find(:user_id).meetups.find(:id)
+  #
   def find_meetup(reviewee)
-    @user_meetups = Meetup.where('ambassador_id = ? OR visitor_id = ?', id, id)
-    @meetup = @user_meetups.select{|m| m.reviews.all && (m.ambassador_id == reviewee.id || m.visitor.id == reviewee.id)}.first
+    @meetup = meetups.select{|m| m.reviews.all && (m.ambassador_id == reviewee.id || m.visitor.id == reviewee.id)}.first
+  end
+
+  def meetups
+    Meetup.where('ambassador_id = ? OR visitor_id = ?', id, id)
   end
 
   def self.from_omniauth(auth)

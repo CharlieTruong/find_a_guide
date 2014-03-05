@@ -18,7 +18,21 @@ class UsersController < ApplicationController
 
   # end
 
+  # Move to a TourSearchController#show
   def search
+    { tours: [
+        {},
+        {},
+        {}
+      ]
+      users: [
+        {},
+        {},
+        {},
+      ]
+    }
+
+
     points = []
     gon.bounds = format_bounds(params[:initial_bounds]) if params[:initial_bounds]
     session[:start_date] = params[:start_date] if params[:start_date]
@@ -26,8 +40,13 @@ class UsersController < ApplicationController
 
     @specialties = Specialty.all
     # @languages = Language.all
+    #
+    # shared work for both response formats goes here
+    # ...
     respond_to do |format|
       if request.xhr?
+        # json specific work goes here
+        # ...
         bounds = format_bounds(params[:bounds])
 
         @tours = Tour.where(Geocoder::Sql.within_bounding_box(bounds[0], bounds[1],
@@ -50,6 +69,8 @@ class UsersController < ApplicationController
           render :json => hashy
         end
       else
+        # html specific work goes here
+        # ...
         gon.points = []
         @tours = Tour.near([params[:center_lat], params[:center_lng]], 500)
         @tours.each do |tour|
@@ -114,9 +135,12 @@ class UsersController < ApplicationController
     end
   end
 
+
+  # move to DashboardsController#show
   def dashboard
+    # no need for @user
     @user = current_user
-    @visitor_meetups = @user.visitor_meetups.where('date_time > ?', Time.now).order('date_time')
+    @visitor_meetups = current_user.visitor_meetups.where('date_time > ?', Time.now).order('date_time')
     @visitor_incomplete_reviews = @user.empty_reviews(:visitor)
     @ambassador_tours = @user.ambassador_meetups.where('date_time > ?', Time.now).order('date_time')
     @ambassador_incomplete_reviews = @user.empty_reviews(:ambassador)

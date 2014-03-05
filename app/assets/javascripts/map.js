@@ -1,15 +1,45 @@
 
 var Tour = function() {
+  this.template = _.template(this.rawTemplate);
+
   this.template = $("<div class='tour_desc'>\
                       <span id='message'></span>\
-                      <div class='tour_text' contenteditable='true'></div>\
+                      <textarea class='tour_text' contenteditable='true'></textarea>\
                       <span class='tour_creation_link' id='remove_marker'>Delete</span>\
                       <span class='tour_creation_link' id='new_tour_button'>Save</span>\
                       <span class='tour_creation_link' id='edit_tour'>Edit</span>\
                     </div>")
 };
 
+Tour.prototype.rawTemplate = "<div><%=description%></div>";
+
+
+pin.click(function() {
+  var t = new Tour(tourData);
+  t.render();
+  $("...").append(t.$el);
+
+});
+
+
+Tour.prototype.render = function() {
+  var data = {description: "foo"};
+
+  this.$el = $(this.template(data));
+  this.$el.find(".save").click(this.save);
+  this.$el.find(".edit").click(this.edit);
+
+  if(alreadyCreated == true) {
+    this.$el.addClass("created");
+  }
+
+}
+
 Tour.prototype.createdTour = function(description) {
+  var data = {description: "foo"};
+
+  return $(this.template(data)).addClass("created");
+
   this.template.find('.tour_text').html(description);
   this.template.find('.tour_text').attr('contenteditable', false);
   this.template.find('#remove_marker').hide();
@@ -27,17 +57,24 @@ Tour.prototype.editTour = function(tour_id) {
   });
 };
 
+function foo() {
+  return $.ajax({
+    url: '/users/' + gon.id + '/tours/' + tour_id, 
+    type: 'PATCH',
+    data: {newDesc : newDesc, tour_id : tour_id },
+    dataType: 'json'
+  })
+}
+
+foo().done(function(resp, textstatus, jqXHR) {
+});
+
+
 Tour.prototype.saveTour = function(tour_id) {
   var self = this
   this.template.find('#new_tour_button').on('click', function() {
     var newDesc = self.template.find('.tour_text').html()
     console.log(newDesc);
-    $.ajax({
-      url: '/users/' + gon.id + '/tours/' + tour_id, 
-      type: 'PATCH',
-      data: {newDesc : newDesc, tour_id : tour_id },
-      dataType: 'json'
-    })
       .done(function(response) {
         self.template.find('#message').html(response.message);
         self.template.find('#message').show();

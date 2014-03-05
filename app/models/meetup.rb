@@ -26,6 +26,7 @@ class Meetup < ActiveRecord::Base
     end
   end
 
+  # move the next two methods to a utility class, MeetupNotificationSearch
   def self.pending_meetups
     start_datetime = Time.now.midnight + 1.day
     end_datetime = Time.now.midnight + 2.days

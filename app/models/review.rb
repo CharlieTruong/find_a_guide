@@ -4,5 +4,6 @@ class Review < ActiveRecord::Base
 	belongs_to :meetup
 
 	validates :rating, :comment, :reviewer_id, :reviewee_id, presence: true
+  validates_inclusion_of :rating, in: (0..5)
 
 end

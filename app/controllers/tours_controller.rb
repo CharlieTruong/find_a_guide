@@ -1,11 +1,13 @@
 class ToursController < ApplicationController
   def edit
+    # delete this
     puts params
   end
 
   def update
     respond_to do |format|
-      if Tour.update(params[:tour_id], description: params[:newDesc])
+      # don't invent new keys
+      if Tour.update(params[:tour_id], description: params[:description])
         format.json do
           render :json => {message: "SUCCESS!"}
         end
@@ -31,7 +33,7 @@ class ToursController < ApplicationController
   def create
     # @tour = Tour.new(description: params[:description], latitude: params[:latitude], longitude: params[:longitude], ambassador_id: params[:user_id])
     @tour = Tour.new(tour_params)
-    @tour.ambassador_id = params[:user_id]
+    @tour.ambassador_id = params[:user_id] # security? what if I set a params[:user_id] client side? maybe use curren_user
     respond_to do |format|
       format.json do
         if @tour.save
@@ -44,6 +46,7 @@ class ToursController < ApplicationController
   end
 
   def index
+    # you have before filter for this, don't reinvent it here
     if current_user
       @ambassador = User.find(params[:user_id])
       @start_date = session[:start_date]
