@@ -34,7 +34,7 @@ _How do I, as a developer, start working on the project?_
 1. _What dependencies does it have (where are they expressed) and how do I install them?_
   - They are all listed in the Gemfile, but...
   - Production - Gon, Geocoder, Dotenv-rails, Rest-client, Postgres
-  - Development/Test - Shoulda-Matchers, FactoryGirl, Faker, Capybara
+  - Development/Test - Shoulda-Matchers, FactoryGirl, Faker, Capybara, Simplecov
   - Those are the gems required, besides what Rails 4 comes with.
 
 2. _How can I see the project working before I change anything?_

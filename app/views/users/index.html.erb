@@ -1,4 +1,4 @@
-  <%= javascript_include_tag "search_results" %>
+<%= javascript_include_tag "search_results" %>
 <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places" %>
 <%= javascript_include_tag 'facebook' %>
 
@@ -34,7 +34,7 @@
     $("#search_results_content").toggleClass('auto_height');
     $("#search_results_list").height($(document).height() - $("#search_results_content").height() - 60);
   })
-  
+
   $("#search_results_list").on('click',function(){
     $("#search_results_content").removeClass('auto_height');
   })

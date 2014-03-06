@@ -9,7 +9,7 @@ class Tour < ActiveRecord::Base
 	reverse_geocoded_by :latitude, :longitude
 	after_validation :geocode
 
-  #Custom Validaton Methods
+  # Custom Validaton Methods
   def you_cannot_drop_pin_if_notambassador
     ambassador_status = User.find(self.ambassador_id).is_ambassador
     if ambassador_status == false

@@ -23,7 +23,7 @@ class ToursController < ApplicationController
     gon.lat = request.location.latitude
     gon.lng = request.location.longitude
     gon.points = []
-    
+
     gon.id = current_user.id
     @tours = current_user.tours
 

@@ -6,7 +6,7 @@ describe SessionsController do
   describe 'signout/sessions#destroy' do
     it 'should render Application#Index' do
       post :destroy
-      expect(response).to redirect_to '/'
+      expect(response).to redirect_to 'http://test.host/auth/facebook/'
     end
   end
 
